@@ -20,12 +20,12 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/conversations", conversationsRoutes);
 
 // CORS Setup nhi hora
-const corsOptions = {
-	origin: "*",
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+// 	origin: "*",
+// };
+app.use(cors());
 
-app.get("/", cors(corsOptions), (req, res) => {
+app.get("/", cors(), (req, res) => {
 	res.json("Chatterz API Live");
 });
 

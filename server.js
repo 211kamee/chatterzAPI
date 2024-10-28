@@ -13,9 +13,9 @@ import conversationsRoutes from "./routes/conversations.routes.js";
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/conversations", conversationsRoutes);

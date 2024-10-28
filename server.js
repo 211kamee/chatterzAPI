@@ -23,9 +23,10 @@ app.use("/api/conversations", conversationsRoutes);
 // const corsOptions = {
 // 	origin: "*",
 // };
-app.use(cors());
 
-app.get("/", cors(), (req, res) => {
+app.use("*", cors());
+
+app.get("/", (req, res) => {
 	res.json("Chatterz API Live");
 });
 

@@ -64,7 +64,7 @@ export const signup = async (req, res) => {
 				.status(400)
 				.json("Username must be at least 4 to 20 characters long!");
 		}
-		if (password.length < 8 && password.length > 20) {
+		if (password.length < 8 || password.length > 20) {
 			return res
 				.status(400)
 				.json("Password must be at least 8 to 20 characters long!");
@@ -72,14 +72,13 @@ export const signup = async (req, res) => {
 		if (password !== confirmpassword) {
 			return res.status(400).json("Passwords do not match");
 		}
-
 		if (await User.findOne({ username })) {
 			return res.status(400).json("Username already taken!");
 		}
 		if (await User.findOne({ email })) {
 			return res
 				.status(400)
-				.json("Email already used try forgot password!");
+				.json("Email already used try Reset Password!");
 		}
 		// Upload to database
 		await User.create({

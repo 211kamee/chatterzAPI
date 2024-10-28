@@ -32,4 +32,5 @@ app.listen(process.env.PORT || 3000, async () => {
 	console.log(
 		`Server is running on port http://localhost:${process.env.PORT}`
 	);
+	console.log(`Origin Allowed to -> ${process.env.CORS_ORIGIN}`);
 });

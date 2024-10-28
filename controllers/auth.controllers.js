@@ -49,37 +49,42 @@ export const signup = async (req, res) => {
 	try {
 		const { username, email, password, confirmpassword } = req.body;
 
+		if (!username || !email || !password || !confirmpassword) {
+			return res.status(400).json("All fields are required!");
+		}
+		if (!isAlphaNumeric(username)) {
+			return res
+			.status(400)
+			.json("Only alphabet and numbers are allowed!");
+		}
+		if (username.length < 4 || username.length > 20) {
+			return res
+			.status(400)
+			.json("Username must be at least 4 to 20 characters long!");
+		}
+		if (password.length < 8 && password.length > 20) {
+			return res
+			.status(400)
+			.json("Password must be at least 8 to 20 characters long!");
+		}
+		if (password !== confirmpassword) {
+			return res.status(400).json("Passwords do not match");
+		}
 		if (password.includes(" ") || username.includes(" ")) {
 			return res
 				.status(400)
 				.json("Username and password must not contain spaces!");
 		}
-		if (!isAlphaNumeric(username)) {
-			return res
-				.status(400)
-				.json("Only alphabet and numbers are allowed!");
-		}
-		if (username.length < 4 || username.length > 20) {
-			return res
-				.status(400)
-				.json("Username must be at least 4 to 20 characters long!");
-		}
-		if (password.length < 8 || password.length > 20) {
-			return res
-				.status(400)
-				.json("Password must be at least 8 to 20 characters long!");
-		}
-		if (password !== confirmpassword) {
-			return res.status(400).json("Passwords do not match");
-		}
+		
 		if (await User.findOne({ username })) {
 			return res.status(400).json("Username already taken!");
 		}
 		if (await User.findOne({ email })) {
 			return res
-				.status(400)
-				.json("Email already used try Reset Password!");
+			.status(400)
+			.json("Email already used try forgot password!");
 		}
+
 		// Upload to database
 		await User.create({
 			username,

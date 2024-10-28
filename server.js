@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+corsOptions = {
+	origin: "*",
+};
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -17,13 +20,9 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/conversations", conversationsRoutes);
-app.use(
-	cors({
-		origin: process.env.CORS_ORIGIN,
-	})
-);
+app.use(cors(corsOptions));
 
-app.get("/", (req, res) => {
+app.get("/", cors(corsOptions), (req, res) => {
 	res.json("Chatterz API Live");
 });
 

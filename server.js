@@ -13,6 +13,7 @@ import conversationsRoutes from "./routes/conversations.routes.js";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
@@ -24,7 +25,6 @@ app.use("/api/conversations", conversationsRoutes);
 // 	origin: "*",
 // };
 
-app.use("*", cors());
 
 app.get("/", (req, res) => {
 	res.json("Chatterz API Live");

@@ -1,9 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-corsOptions = {
-	origin: "*",
-};
+
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -20,6 +18,11 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/conversations", conversationsRoutes);
+
+// CORS Setup nhi hora
+const corsOptions = {
+	origin: "*",
+};
 app.use(cors(corsOptions));
 
 app.get("/", cors(corsOptions), (req, res) => {

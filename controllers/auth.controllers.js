@@ -33,7 +33,7 @@ export const login = async (req, res) => {
 			.status(200)
 			.json(`Login Successful as ${registeredUser.username} !`);
 	} catch (error) {
-		res.status(500).json([error.message, error]);
+		res.status(500).json(error.message);
 	}
 };
 
@@ -41,7 +41,7 @@ export const logout = (req, res) => {
 	try {
 		return res.cookie("token", "").status(200).json("Logged out!");
 	} catch (error) {
-		res.status(500).json([error.message, error]);
+		res.status(500).json(error.message);
 	}
 };
 

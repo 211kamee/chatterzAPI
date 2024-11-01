@@ -5,7 +5,10 @@ export const login = async (req, res) => {
 	try {
 		const { username, password } = req.body;
 		if (!username || !password) {
-			return res.status(400).json("Username and Password required!");
+			return res
+				.clearCookie("token")
+				.status(400)
+				.json("Username and Password required!");
 		}
 
 		const registeredUser = await User.findOne({ username }).select(
@@ -18,6 +21,7 @@ export const login = async (req, res) => {
 		if (!registeredUser || !passwordMatch) {
 			return res
 				.cookie("token", "")
+				.clearCookie("token")
 				.status(400)
 				.json(
 					"Invaild username or password. Register or Try forgot password if available!"
@@ -47,18 +51,23 @@ export const logout = (req, res) => {
 
 export const signup = async (req, res) => {
 	try {
-		const { username, email, password, confirmpassword } = req.body;
+		const { username, email, password, confirmPassword } = req.body;
 
-		if (!username || !email || !password || !confirmpassword) {
-			return res.status(400).json("All fields are required!");
+		if (!username || !email || !password || !confirmPassword) {
+			return res
+				.clearCookie("token")
+				.status(400)
+				.json("All fields are required!");
 		}
 		if (username.length < 4 || username.length > 20) {
 			return res
+				.clearCookie("token")
 				.status(400)
 				.json("Username must be at least 4 to 20 characters long!");
 		}
 		if (!isAlphaNumeric(username)) {
 			return res
+				.clearCookie("token")
 				.status(400)
 				.json("Only alphabet and numbers are allowed!");
 		}
@@ -72,23 +81,32 @@ export const signup = async (req, res) => {
 		}
 		if (password.length < 8 && password.length > 20) {
 			return res
+				.clearCookie("token")
 				.status(400)
 				.json("Password must be at least 8 to 20 characters long!");
 		}
-		if (password !== confirmpassword) {
-			return res.status(400).json("Passwords do not match");
+		if (password !== confirmPassword) {
+			return res
+				.clearCookie("token")
+				.status(400)
+				.json("Passwords do not match");
 		}
 		if (password.includes(" ") || username.includes(" ")) {
 			return res
+				.clearCookie("token")
 				.status(400)
 				.json("Username and password must not contain spaces!");
 		}
 
 		if (await User.findOne({ username })) {
-			return res.status(400).json("Username already taken!");
+			return res
+				.clearCookie("token")
+				.status(400)
+				.json("Username already taken!");
 		}
 		if (await User.findOne({ email })) {
 			return res
+				.clearCookie("token")
 				.status(400)
 				.json("Email already used try forgot password!");
 		}
@@ -110,6 +128,6 @@ export const signup = async (req, res) => {
 			.status(200)
 			.json({ user });
 	} catch (error) {
-		res.status(400).json(error.message);
+		res.status(500).json(error.message);
 	}
 };

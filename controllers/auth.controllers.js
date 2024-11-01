@@ -76,10 +76,12 @@ export const signup = async (req, res) => {
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 			)
 		) {
-			toast.error("Not a valid email address");
-			return false;
+			return res
+				.clearCookie("token")
+				.status(400)
+				.json("Not a valid email address!");
 		}
-		if (password.length < 8 && password.length > 20) {
+		if (password.length < 8 || password.length > 20) {
 			return res
 				.clearCookie("token")
 				.status(400)

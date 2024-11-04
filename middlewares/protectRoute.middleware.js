@@ -4,7 +4,8 @@ import User from "../models/user.models.js";
 const protectRoute = async (req, res, next) => {
 	try {
 		const token = req.cookies.token;
-
+		console.log(token);
+		
 		if (!token) {
 			return res.status(500).json(`Not logged in.`);
 		}

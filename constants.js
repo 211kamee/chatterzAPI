@@ -15,8 +15,8 @@ export const isAlphaNumeric = (str) => {
 
 export const cookiesOptions = {
 	maxAge: 7 * 24 * 60 * 60 * 1000, // 14 days
-	httpOnly: true, // Prevent client side JavaScript from accessing the cookie or XSS attacks
-	secure: true, // Only send cookie over HTTPS
-	partitioned: true,
+	httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
+	secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
 	sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
+	partitioned: true,
 };

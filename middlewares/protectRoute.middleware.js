@@ -6,16 +6,17 @@ const protectRoute = async (req, res, next) => {
 		const token = req.cookies.token;
 
 		if (!token) {
-			return res.status(500).json(`Not authenticated.`);
+			return res.status(500).json(`Login! Currently not authenticated.`);
 		}
 
 		const decodedToken = jsonwebtoken.verify(
 			token,
-			process.env.ACCESS_TOKEN_SECRET
+			process.env.ACCESS_TOKEN_SECRET,
+			(err, token) => (err ? null : token)
 		);
 
 		if (!decodedToken) {
-			return res.status(500).json(`Not a valid token.`);
+			return res.status(500).json(`Login again! Session expired.`);
 		}
 
 		const user = await User.findOne({ _id: decodedToken._id }).select(
@@ -23,14 +24,16 @@ const protectRoute = async (req, res, next) => {
 		);
 
 		if (!user) {
-			return res.status(500).json(`Unable to find the User!`);
+			return res
+				.status(500)
+				.json(`Login again! Unable to find the User!`);
 		}
 
 		req.user = user;
 
 		next();
 	} catch (error) {
-		res.status(500).json([error.message, error]);
+		res.status(500).json(error.message);
 	}
 };
 export default protectRoute;

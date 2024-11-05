@@ -1,31 +1,12 @@
 import User from "../models/user.models.js";
+import { isAlphaNumeric, cookiesOptions } from "../constants.js";
 
-export const isAlphaNumeric = (str) => {
-	var code, i, len;
-
-	for (i = 0, len = str.length; i < len; i++) {
-		code = str.charCodeAt(i);
-		if (
-			!(code > 47 && code < 58) && // numeric (0-9)
-			!(code > 64 && code < 91) && // upper alpha (A-Z)
-			!(code > 96 && code < 123) // lower alpha (a-z)
-		)
-			return false;
-	}
-	return true;
-};
 export const login = async (req, res) => {
 	try {
 		const { username, password } = req.body;
 		if (!username || !password) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Username and Password required!");
 		}
@@ -39,20 +20,8 @@ export const login = async (req, res) => {
 
 		if (!registeredUser || !passwordMatch) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json(
 					"Invaild username or password. Register or Try forgot password if available!"
@@ -64,13 +33,7 @@ export const login = async (req, res) => {
 		const token = await registeredUser.tokenGenerator();
 
 		return res
-			.cookie("token", token, {
-				maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-				httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-				secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-				sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-				partitioned: true,
-			})
+			.cookie("token", token, cookiesOptions)
 			.status(200)
 			.json({ user });
 	} catch (error) {
@@ -79,12 +42,10 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-	try {
-		res.clearCookie("token");
-		return res.status(200).json("Logged out!");
-	} catch (error) {
-		res.status(500).json(error.message);
-	}
+	return res
+		.clearCookie("token", cookiesOptions)
+		.status(200)
+		.json("Logged out!");
 };
 
 export const signup = async (req, res) => {
@@ -93,37 +54,19 @@ export const signup = async (req, res) => {
 
 		if (!username || !email || !password || !confirmPassword) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("All fields are required!");
 		}
 		if (username.length < 4 || username.length > 20) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Username must be at least 4 to 20 characters long!");
 		}
 		if (!isAlphaNumeric(username)) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Only alphabet and numbers are allowed!");
 		}
@@ -133,74 +76,38 @@ export const signup = async (req, res) => {
 			)
 		) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Not a valid email address!");
 		}
 		if (password.length < 8 || password.length > 20) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Password must be at least 8 to 20 characters long!");
 		}
 		if (password !== confirmPassword) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Passwords do not match");
 		}
 		if (password.includes(" ") || username.includes(" ")) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Username and password must not contain spaces!");
 		}
 
 		if (await User.findOne({ username })) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Username already taken!");
 		}
 		if (await User.findOne({ email })) {
 			return res
-				.cookie("token", "", {
-					maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-					httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-					secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-					sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-					partitioned: true,
-				})
+				.clearCookie("token", cookiesOptions)
 				.status(400)
 				.json("Email already used try forgot password!");
 		}
@@ -218,13 +125,7 @@ export const signup = async (req, res) => {
 		const token = user.tokenGenerator();
 
 		return res
-			.cookie("token", token, {
-				maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-				httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-				secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-				sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-				partitioned: true,
-			})
+			.cookie("token", token, cookiesOptions)
 			.status(200)
 			.json({ user });
 	} catch (error) {

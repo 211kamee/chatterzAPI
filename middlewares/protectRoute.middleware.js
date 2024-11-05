@@ -6,7 +6,7 @@ const protectRoute = async (req, res, next) => {
 		const token = req.cookies.token;
 
 		if (!token) {
-			return res.status(500).json(`Not logged in.`);
+			return res.status(500).json(`Not authenticated.`);
 		}
 
 		const decodedToken = jsonwebtoken.verify(
@@ -15,15 +15,15 @@ const protectRoute = async (req, res, next) => {
 		);
 
 		if (!decodedToken) {
-			return res.status(500).json(`Not logged in.`);
+			return res.status(500).json(`Not a valid token.`);
 		}
 
 		const user = await User.findOne({ _id: decodedToken._id }).select(
-			"_id"
+			"-password"
 		);
 
 		if (!user) {
-			return res.status(500).json(`Unauthorised!`);
+			return res.status(500).json(`Unable to find the User!`);
 		}
 
 		req.user = user;

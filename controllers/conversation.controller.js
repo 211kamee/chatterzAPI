@@ -12,6 +12,7 @@ export const getConversations = async (req, res) => {
 		if (!conversations) {
 			return res.status(200).json([]);
 		}
+
 		return res.status(200).json(conversations);
 	} catch (error) {
 		res.status(500).json([error.message, error]);
@@ -20,7 +21,11 @@ export const getConversations = async (req, res) => {
 
 export const getPeople = async (req, res) => {
 	try {
-		const people = await User.find().select("username -_id");
+		const loggedInUser = req.user;
+
+		const people = await User.find({
+			_id: { $ne: loggedInUser },
+		}).select("username");
 
 		if (!people) {
 			return res.status(200).json([]);
@@ -29,5 +34,6 @@ export const getPeople = async (req, res) => {
 		return res.status(200).json(people);
 	} catch (error) {
 		res.status(500).json(error.message);
+		console.log(error);
 	}
 };

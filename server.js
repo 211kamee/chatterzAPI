@@ -10,7 +10,7 @@ import dbConnection from "./db/dbConnection.js";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import conversationsRoutes from "./routes/conversations.routes.js";
-
+4
 const app = express();
 
 app.use(express.json());

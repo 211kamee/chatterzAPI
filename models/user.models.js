@@ -44,7 +44,8 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
 	if (this.isModified("password")) {
-		this.password = await bcryptjs.hash(this.password, 10);
+		const generatedSalt = await genSalt();
+		this.password = await bcryptjs.hash(this.password, generatedSalt);
 		return next();
 	}
 	return next();
@@ -56,13 +57,12 @@ userSchema.methods.passwordMatch = async function (password) {
 
 userSchema.methods.tokenGenerator = async function () {
 	// Generate JWT Token and store it in variable
-
 	const token = jsonwebtoken.sign(
 		{ _id: this._id },
 		process.env.ACCESS_TOKEN_SECRET,
 		{ expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
 	);
-	return token
+	return token;
 };
 
 const User = model("User", userSchema);

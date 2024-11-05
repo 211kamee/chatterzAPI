@@ -80,13 +80,7 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
 	try {
-		res.clearCookie("token", {
-			maxAge: 0, // 7 days
-			httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
-			secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-			sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
-			partitioned: true,
-		});
+		res.clearCookie("token");
 		return res.status(200).json("Logged out!");
 	} catch (error) {
 		res.status(500).json(error.message);

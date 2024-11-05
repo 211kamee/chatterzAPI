@@ -6,6 +6,7 @@ export const sendMessage = async (req, res) => {
 	try {
 		const message = req.body.message.trim();
 		const senderID = req.user._id;
+		
 		const { _id: receiverID } = await User.findOne({
 			username: req.params.username,
 		}).select("_id");
@@ -30,7 +31,7 @@ export const sendMessage = async (req, res) => {
 			message,
 		});
 
-		conversation.messages.push(newMessage._id);
+		conversation.messages.unshift(newMessage._id);
 		await conversation.save();
 
 		res.status(200).json(newMessage);

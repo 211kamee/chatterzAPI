@@ -44,7 +44,7 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
 	if (this.isModified("password")) {
-		const generatedSalt = await genSalt();
+		const generatedSalt = await bcryptjs.genSalt();
 		this.password = await bcryptjs.hash(this.password, generatedSalt);
 		return next();
 	}

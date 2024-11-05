@@ -55,13 +55,11 @@ userSchema.methods.passwordMatch = async function (password) {
 	return await bcryptjs.compare(password, this?.password || "");
 };
 
-userSchema.methods.tokenGenerator = async function () {
+userSchema.methods.tokenGenerator = function () {
 	// Generate JWT Token and store it in variable
-	const token = jsonwebtoken.sign(
-		{ _id: this._id },
-		process.env.JWT_SECRET,
-		{ expiresIn: process.env.JWT_EXPIRY }
-	);
+	const token = jsonwebtoken.sign({ _id: this._id }, process.env.JWT_SECRET, {
+		expiresIn: process.env.JWT_EXPIRY,
+	});
 	return token;
 };
 

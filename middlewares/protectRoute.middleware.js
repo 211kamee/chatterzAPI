@@ -11,7 +11,7 @@ const protectRoute = async (req, res, next) => {
 
 		const decodedToken = jsonwebtoken.verify(
 			token,
-			process.env.ACCESS_TOKEN_SECRET,
+			process.env.JWT_SECRET,
 			(err, token) => (err ? null : token)
 		);
 

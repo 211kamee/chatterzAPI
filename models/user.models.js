@@ -59,8 +59,8 @@ userSchema.methods.tokenGenerator = async function () {
 	// Generate JWT Token and store it in variable
 	const token = jsonwebtoken.sign(
 		{ _id: this._id },
-		process.env.ACCESS_TOKEN_SECRET,
-		{ expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+		process.env.JWT_SECRET,
+		{ expiresIn: process.env.JWT_EXPIRY }
 	);
 	return token;
 };

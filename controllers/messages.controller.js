@@ -31,7 +31,7 @@ export const sendMessage = async (req, res) => {
 			message,
 		});
 
-		conversation.messages.unshift(newMessage._id);
+		conversation.messages.push(newMessage._id);
 		await conversation.save();
 
 		res.status(200).json(newMessage);

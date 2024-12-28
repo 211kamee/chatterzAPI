@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
 	cors({
-		origin: [process.env.CORS_ORIGIN],
+		origin: JSON.parse(process.env.ORIGIN),
 		credentials: true,
 	})
 );
@@ -31,15 +31,9 @@ app.get("/", (req, res) => {
 
 app.listen(process.env.PORT || 3000, async () => {
 	// MongoDB Connection
-	try {
-		await mongoose.connect(`${process.env.MONGO_URI}`);
-		console.log(`DB Connected!`);
-	} catch (error) {
-		console.log(`Error connecting to database: ${error.message}`);
-	}
+	await mongoose.connect(`${process.env.MONGO_URI}`);
+	console.log(`DB Connected!`);
 
-	console.log(`Origin Allowed to -> ${process.env.CORS_ORIGIN}`);
-	console.log(
-		`Server is running on port http://localhost:${process.env.PORT}`
-	);
+	console.log(`Server live on   => http://localhost:${process.env.PORT}`);
+	console.log(`Origin Allowed to   => ${JSON.parse(process.env.ORIGIN)}`);
 });

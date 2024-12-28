@@ -18,4 +18,7 @@ export const cookiesOptions = {
 	secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
 	sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
 	partitioned: true,
+	maxAge: 7 * 60 * 60 * 60 * 1000,
 };
+
+export const ORIGIN = ["https://chatterz.pages.dev", "http://localhost:5173"];

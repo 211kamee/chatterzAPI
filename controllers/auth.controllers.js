@@ -21,7 +21,7 @@ export const login = async (req, res) => {
 		if (!registeredUser || !passwordMatch) {
 			return res
 				.clearCookie("token", cookiesOptions)
-				.status(400)
+				.status(401)
 				.json(
 					"Invaild username or password. Register or Try forgot password if available!"
 				);

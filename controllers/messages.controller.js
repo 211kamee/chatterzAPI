@@ -1,12 +1,13 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.models.js";
+import { getSocketID, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
 	try {
 		const message = req.body.message.trim();
 		const senderID = req.user._id;
-		
+
 		const { _id: receiverID } = await User.findOne({
 			username: req.params.username,
 		}).select("_id");
@@ -34,6 +35,11 @@ export const sendMessage = async (req, res) => {
 		conversation.messages.push(newMessage._id);
 		await conversation.save();
 
+		const receiverSocketID = getSocketID(req.params.username);
+		if (receiverSocketID) {
+			io.to(receiverSocketID).emit("newMsg", newMessage);
+		}
+
 		res.status(200).json(newMessage);
 	} catch (error) {
 		res.status(500).json([error.message, error]);
@@ -46,9 +52,8 @@ export const getMessage = async (req, res) => {
 			username: req.params.username,
 		}).select("_id");
 
-		if (!receiverUser) {
-			return res.status(404).json(`User Not Found.`);
-		}
+		if (!receiverUser) return res.status(404).json(`User Not Found.`);
+
 		const receiverID = receiverUser._id;
 
 		const senderID = req.user._id;

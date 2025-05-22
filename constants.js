@@ -16,9 +16,9 @@ export const isAlphaNumeric = (str) => {
 export const cookiesOptions = {
 	httpOnly: true, // Prevents client-side JavaScript from accessing the cookie, reducing the risk of XSS attacks
 	secure: true, // When true, the cookie is only sent over HTTPS; if false, it can be sent over HTTP as well.
-	sameSite: "None", // Prevent cross-site request forgery attacks or CRSF attacks
+	sameSite: 'None', // Prevent cross-site request forgery attacks or CRSF attacks
 	partitioned: true,
 	maxAge: 30 * 24 * 60 * 60 * 1000,
 };
 
-export const ORIGIN = ["https://chatterz.pages.dev", "http://localhost:5173"];
+export const ORIGIN = ['https://chatterz.pages.dev', 'http://localhost:5173'];

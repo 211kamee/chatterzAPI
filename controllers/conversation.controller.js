@@ -1,5 +1,5 @@
-import Conversation from "../models/conversation.model.js";
-import User from "../models/user.models.js";
+import Conversation from '../models/conversation.model.js';
+import User from '../models/user.models.js';
 
 export const getConversations = async (req, res) => {
 	try {
@@ -22,11 +22,11 @@ export const getConversations = async (req, res) => {
 export const findPeople = async (req, res) => {
 	try {
 		const searchTerm = req.body.searchTerm;
-		const regex = new RegExp(searchTerm, "i");
+		const regex = new RegExp(searchTerm, 'i');
 
 		const searchResult = await User.find({
 			$and: [{ _id: { $ne: req.user._id } }, { username: regex }],
-		}).select("username");
+		}).select('username');
 
 		if (!searchResult) {
 			return res.status(200).json([]);
@@ -45,7 +45,7 @@ export const getPeople = async (req, res) => {
 
 		const people = await User.find({
 			_id: { $ne: loggedInUser },
-		}).select("username");
+		}).select('username');
 
 		if (!people) {
 			return res.status(200).json([]);

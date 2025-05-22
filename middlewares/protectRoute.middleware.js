@@ -1,5 +1,5 @@
-import jsonwebtoken from "jsonwebtoken";
-import User from "../models/user.models.js";
+import jsonwebtoken from 'jsonwebtoken';
+import User from '../models/user.models.js';
 
 const protectRoute = async (req, res, next) => {
 	try {
@@ -20,7 +20,7 @@ const protectRoute = async (req, res, next) => {
 		}
 
 		const user = await User.findOne({ _id: decodedToken._id }).select(
-			"-password"
+			'-password'
 		);
 
 		if (!user) {

@@ -1,18 +1,18 @@
-import bcryptjs from "bcryptjs";
-import { Schema, model } from "mongoose";
-import jsonwebtoken from "jsonwebtoken";
+import bcryptjs from 'bcryptjs';
+import { Schema, model } from 'mongoose';
+import jsonwebtoken from 'jsonwebtoken';
 
 const userSchema = new Schema({
 	fullname: {
 		type: String,
-		default: "",
+		default: '',
 		trim: true,
 	},
 	username: {
 		type: String,
 		lowercase: true,
-		maxlength: [20, "Username must be at least 4 to 20 characters long."],
-		minlength: [4, "Username must be at least 4 to 20 characters long."],
+		maxlength: [20, 'Username must be at least 4 to 20 characters long.'],
+		minlength: [4, 'Username must be at least 4 to 20 characters long.'],
 		required: true,
 		trim: true,
 		unique: true,
@@ -20,8 +20,8 @@ const userSchema = new Schema({
 	email: {
 		type: String,
 		lowercase: true,
-		maxlength: [50, "Email must be at most 50 characters long."],
-		minlength: [5, "Email must be at least 5 characters long."],
+		maxlength: [50, 'Email must be at most 50 characters long.'],
+		minlength: [5, 'Email must be at least 5 characters long.'],
 		required: true,
 		trim: true,
 		unique: true,
@@ -29,7 +29,7 @@ const userSchema = new Schema({
 			validator: function (v) {
 				return /\S+@\S+\.\S+/.test(v);
 			},
-			message: "Invalid email format.",
+			message: 'Invalid email format.',
 		},
 	},
 	password: {
@@ -38,12 +38,12 @@ const userSchema = new Schema({
 	},
 	profilePicture: {
 		type: String,
-		default: "",
+		default: '',
 	},
 });
 
-userSchema.pre("save", async function (next) {
-	if (this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+	if (this.isModified('password')) {
 		const generatedSalt = await bcryptjs.genSalt();
 		this.password = await bcryptjs.hash(this.password, generatedSalt);
 		return next();
@@ -52,7 +52,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.passwordMatch = async function (password) {
-	return await bcryptjs.compare(password, this?.password || "");
+	return await bcryptjs.compare(password, this?.password || '');
 };
 
 userSchema.methods.tokenGenerator = function () {
@@ -63,6 +63,6 @@ userSchema.methods.tokenGenerator = function () {
 	return token;
 };
 
-const User = model("User", userSchema);
+const User = model('User', userSchema);
 
 export default User;
